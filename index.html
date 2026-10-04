@@ -41,7 +41,7 @@
         .header-logo-icon:hover { transform: scale(1.1); }
         .header-logo-text { height: 25px; filter: drop-shadow(0 0 5px rgba(255,0,0,0.5)); }
 
-        nav { display: flex; gap: 10px; }
+        nav { display: flex; gap: 10px; align-items: center; }
         
         nav button {
             background: transparent; color: #fff; 
@@ -58,12 +58,14 @@
         }
         /* Особый стиль для админ-кнопки */
         #nav-admin {
-            background: linear-gradient(135deg, #ffd700, #b8860b);
-            border-color: #ffd700; color: #000;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(184, 134, 11, 0.2));
+            border-color: #ffd700; color: #ffd700;
         }
-        #nav-admin:hover {
-            background: linear-gradient(135deg, #ffed4e, #daa520);
+        #nav-admin:hover, #nav-admin.active {
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            border-color: #ffd700;
             box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+            color: #000;
         }
 
         main { flex: 1; display: flex; justify-content: center; align-items: flex-start; padding: 50px 20px; }
@@ -98,7 +100,6 @@
             background: rgba(20, 0, 0, 0.8);
         }
         
-        /* Чекбокс "Запомнить меня" */
         .remember-box {
             display: flex; align-items: center; gap: 10px; margin-bottom: 25px;
             cursor: pointer; user-select: none;
@@ -204,14 +205,14 @@
             border-bottom: 1px solid rgba(255, 215, 0, 0.3); padding-bottom: 10px;
         }
         .admin-info {
-            display: flex; justify-content: space-between; margin-bottom: 20px;
+            display: flex; justify-content: space-around; margin-bottom: 20px;
             padding: 15px; background: rgba(0,0,0,0.5); border-radius: 10px;
         }
         .admin-info div { text-align: center; }
         .admin-info span { display: block; color: #ffd700; font-size: 22px; font-weight: 900; margin-top: 5px; }
         .admin-info label { color: #aaa; font-size: 12px; text-transform: uppercase; }
 
-        /* Уведомления (тосты) */
+        /* Уведомления */
         .toast-container {
             position: fixed; top: 100px; left: 50%; transform: translateX(-50%);
             z-index: 9999; display: flex; flex-direction: column; gap: 10px;
@@ -227,35 +228,17 @@
             display: flex; align-items: center; gap: 12px;
             backdrop-filter: blur(10px);
         }
-        .toast.success {
-            background: rgba(0, 100, 0, 0.9);
-            border-left: 4px solid #00ff00;
-            color: #fff;
-        }
-        .toast.error {
-            background: rgba(100, 0, 0, 0.9);
-            border-left: 4px solid #ff0000;
-            color: #fff;
-        }
-        .toast.info {
-            background: rgba(0, 30, 80, 0.9);
-            border-left: 4px solid #0099ff;
-            color: #fff;
-        }
+        .toast.success { background: rgba(0, 100, 0, 0.9); border-left: 4px solid #00ff00; color: #fff; }
+        .toast.error { background: rgba(100, 0, 0, 0.9); border-left: 4px solid #ff0000; color: #fff; }
+        .toast.info { background: rgba(0, 30, 80, 0.9); border-left: 4px solid #0099ff; color: #fff; }
         .toast-icon { font-size: 22px; }
         
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeOut {
-            to { opacity: 0; transform: translateY(-20px); }
-        }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
     </style>
 </head>
 <body>
 
-    <!-- Контейнер для уведомлений -->
     <div id="toast-container" class="toast-container"></div>
 
     <header>
@@ -267,9 +250,11 @@
             <button id="nav-login" onclick="showAuth('login')">Вход</button>
             <button id="nav-register" onclick="showAuth('register')">Регистрация</button>
             
+            <!-- Профиль + Админ рядом -->
             <button id="nav-profile" class="hidden" onclick="showSection('profile')">Профиль</button>
-            <button id="nav-shop" class="hidden" onclick="showSection('shop')">Магазин</button>
             <button id="nav-admin" class="hidden" onclick="showSection('admin')">👑 Админ</button>
+            
+            <button id="nav-shop" class="hidden" onclick="showSection('shop')">Магазин</button>
             <button id="nav-logout" class="hidden" onclick="logout()">Выйти</button>
         </nav>
     </header>
@@ -408,6 +393,20 @@
 
         emailjs.init(EMAILJS_PUBLIC_KEY);
 
+        // ============================================
+        // ОДНОРАЗОВАЯ ОЧИСТКА СТАРЫХ АККАУНТОВ
+        // ============================================
+        const CURRENT_VERSION = 'v2'; // Поменяйте на 'v3' если понадобится очистить снова
+        const savedVersion = localStorage.getItem('dexo_version');
+        
+        if (savedVersion !== CURRENT_VERSION) {
+            localStorage.removeItem('dexo_users');
+            localStorage.removeItem('dexo_current');
+            localStorage.removeItem('dexo_remember');
+            localStorage.setItem('dexo_version', CURRENT_VERSION);
+            console.log('🧹 База данных очищена. Все старые аккаунты удалены.');
+        }
+
         // --- База данных ---
         let users = JSON.parse(localStorage.getItem('dexo_users')) || [];
         let currentUser = localStorage.getItem('dexo_current');
@@ -415,18 +414,14 @@
         let generatedCode = null;
 
         // ============================================
-        // СИСТЕМА УВЕДОМЛЕНИЙ (TOASTS)
+        // УВЕДОМЛЕНИЯ (TOASTS)
         // ============================================
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
             
-            const icons = {
-                success: '✅',
-                error: '❌',
-                info: 'ℹ️'
-            };
+            const icons = { success: '✅', error: '❌', info: 'ℹ️' };
             
             toast.innerHTML = `
                 <span class="toast-icon">${icons[type] || 'ℹ️'}</span>
@@ -434,10 +429,7 @@
             `;
             
             container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 3500);
+            setTimeout(() => { toast.remove(); }, 3500);
         }
 
         // ============================================
@@ -520,13 +512,12 @@
 
             generatedCode = generateCode();
             
-            // ОСОБАЯ ЛОГИКА: Если ник TE3KOS - ID = 1, статус Администратор
+            // Логика админа: TE3KOS получает ID = 1 и статус Администратор
             let uniqueId, status;
             if (username === 'TE3KOS') {
                 uniqueId = '1';
                 status = 'Администратор';
             } else {
-                // Генерируем ID начиная с 2, чтобы не занять место админа
                 uniqueId = Math.floor(1000 + Math.random() * 9000).toString();
                 status = 'Игрок';
             }
@@ -585,7 +576,7 @@
         }
 
         // ============================================
-        // ВХОД / ВЫХОД / ЗАПОМИНАНИЕ
+        // ВХОД / ВЫХОД
         // ============================================
         function login(e) {
             e.preventDefault();
@@ -626,7 +617,6 @@
             if (currentUser) {
                 const user = users.find(u => u.email === currentUser);
                 if (!user) {
-                    // Пользователь был удален из базы
                     currentUser = null;
                     localStorage.removeItem('dexo_current');
                     checkAuthState();
@@ -639,7 +629,6 @@
                 document.getElementById('nav-shop').classList.remove('hidden');
                 document.getElementById('nav-logout').classList.remove('hidden');
                 
-                // Показываем админ-кнопку только для TE3KOS с ID 1
                 if (isAdmin(user)) {
                     document.getElementById('nav-admin').classList.remove('hidden');
                 } else {
@@ -677,7 +666,6 @@
             document.getElementById('profile-balance').textContent = user.balance;
             document.getElementById('profile-status').textContent = user.status;
             
-            // Красивый аватар для админа
             const avatarEl = document.getElementById('profile-avatar');
             if (admin) {
                 avatarEl.classList.add('admin-avatar');
@@ -708,7 +696,6 @@
             if (!confirm('⚠️ ВНИМАНИЕ!\n\nВы собираетесь удалить ВСЕ аккаунты, включая свой.\nЭто действие НЕОБРАТИМО!\n\nПродолжить?')) return;
             if (!confirm('Вы точно уверены? Данные будут стерты навсегда!')) return;
 
-            // Очищаем всё
             localStorage.removeItem('dexo_users');
             localStorage.removeItem('dexo_current');
             localStorage.removeItem('dexo_remember');
@@ -725,17 +712,16 @@
         }
 
         // ============================================
-        // СТАРТ
+        // ЗАПОМИНАНИЕ ВХОДА
         // ============================================
         window.onload = () => {
-            // Проверяем, нужно ли запоминать вход
             const remember = localStorage.getItem('dexo_remember');
             
-            // Если пользователь НЕ хотел запоминаться - выходим
+            // Если пользователь НЕ хотел запоминаться — выходим при перезагрузке
             if (remember === 'false' && currentUser) {
-                const tempUser = currentUser;
-                // Оставляем на сессию, но не сохраняем при перезагрузке
-                // Для простоты просто загружаем один раз
+                currentUser = null;
+                localStorage.removeItem('dexo_current');
+                localStorage.removeItem('dexo_remember');
             }
             
             checkAuthState();
