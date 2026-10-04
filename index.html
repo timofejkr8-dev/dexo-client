@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DexoClient - Портал</title>
+    <!-- Подключаем красивый шрифт -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
         
         body { 
             background-color: #050505; 
@@ -13,138 +15,179 @@
             display: flex; 
             flex-direction: column; 
             min-height: 100vh; 
-            /* Новый стильный фон: сетка и красные свечения */
             background-image: 
-                linear-gradient(rgba(255, 0, 0, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 0, 0, 0.05) 1px, transparent 1px),
-                radial-gradient(circle at 20% 50%, rgba(255, 0, 0, 0.15), transparent 40%),
-                radial-gradient(circle at 80% 80%, rgba(255, 0, 0, 0.1), transparent 40%);
-            background-size: 30px 30px, 30px 30px, 100% 100%, 100% 100%;
+                linear-gradient(rgba(255, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.03) 1px, transparent 1px),
+                radial-gradient(circle at 10% 20%, rgba(255, 0, 0, 0.15), transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 0, 0.1), transparent 40%);
+            background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
         }
 
         header {
-            background: rgba(10, 10, 10, 0.9);
-            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(15px);
             padding: 15px 40px; 
             display: flex; 
             align-items: center; 
             justify-content: space-between;
             border-bottom: 2px solid #ff0000; 
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 5px 25px rgba(255, 0, 0, 0.2);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
         .logo-container { display: flex; align-items: center; gap: 15px; }
-        /* Стили для картинки логотипа */
-        .header-logo { 
-            height: 45px; 
-            filter: drop-shadow(0 0 10px rgba(255,0,0,0.8));
-            border-radius: 5px;
-        }
+        .header-logo-icon { height: 45px; filter: drop-shadow(0 0 10px rgba(255,0,0,0.8)); transition: transform 0.3s; }
+        .header-logo-icon:hover { transform: scale(1.1); }
+        .header-logo-text { height: 25px; filter: drop-shadow(0 0 5px rgba(255,0,0,0.5)); }
 
+        nav { display: flex; gap: 10px; }
+        
+        /* Красивые кнопки */
         nav button {
-            background: transparent; color: #fff; border: 1px solid #ff0000;
-            padding: 10px 20px; margin-left: 10px; border-radius: 5px;
-            cursor: pointer; font-weight: bold; transition: all 0.3s ease;
-            text-transform: uppercase; font-size: 14px;
+            background: transparent; 
+            color: #fff; 
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            padding: 10px 20px; 
+            border-radius: 8px;
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            text-transform: uppercase;
         }
         nav button:hover, nav button.active { 
-            background: #ff0000; box-shadow: 0 0 15px #ff0000; color: #000; 
+            background: #ff0000; 
+            border-color: #ff0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6); 
+            color: #000; 
+            transform: translateY(-2px);
         }
 
-        main { flex: 1; display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px; }
+        main { flex: 1; display: flex; justify-content: center; align-items: flex-start; padding: 50px 20px; }
         
         .container {
             width: 100%; max-width: 800px; background: rgba(17, 17, 17, 0.95);
-            border: 1px solid #330000; border-radius: 15px; padding: 30px;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 20px; padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(255, 0, 0, 0.05);
             margin-bottom: 30px;
+            animation: fadeIn 0.5s ease-out;
         }
         
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
         .auth-container { max-width: 500px; }
         .hidden { display: none !important; }
         
-        h2 { text-align: center; margin-bottom: 25px; color: #ff0000; text-transform: uppercase; letter-spacing: 1px; }
-        h3 { color: #ff0000; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        h2 { 
+            text-align: center; margin-bottom: 30px; 
+            color: #fff; text-transform: uppercase; letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            font-weight: 900;
+        }
+        h3 { color: #ff0000; margin-bottom: 15px; font-weight: 800; }
         
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; color: #ccc; font-size: 14px; }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 10px; color: #aaa; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
         .form-group input, .form-group textarea {
-            width: 100%; padding: 12px; background: #050505;
-            border: 1px solid #333; border-radius: 5px; color: #fff; outline: none; transition: border 0.3s;
+            width: 100%; padding: 15px; background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #333; border-radius: 10px; color: #fff; outline: none; 
+            transition: all 0.3s ease; font-size: 15px;
         }
-        .form-group input:focus, .form-group textarea:focus { border-color: #ff0000; box-shadow: 0 0 10px rgba(255,0,0,0.3); }
+        .form-group input:focus, .form-group textarea:focus { 
+            border-color: #ff0000; 
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); 
+            background: rgba(20, 0, 0, 0.8);
+        }
         
+        /* Кнопка действия (основная) */
         .btn-primary {
-            width: 100%; padding: 12px; background: #ff0000; color: #000;
-            border: none; border-radius: 5px; font-weight: bold; font-size: 16px;
-            cursor: pointer; transition: all 0.3s; text-transform: uppercase;
+            width: 100%; padding: 16px; 
+            background: linear-gradient(135deg, #ff0000, #990000); 
+            color: #fff;
+            border: none; border-radius: 10px; 
+            font-weight: 800; font-size: 16px; letter-spacing: 1px;
+            cursor: pointer; transition: all 0.3s ease; 
+            text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
         }
-        .btn-primary:hover { background: #cc0000; box-shadow: 0 0 20px #ff0000; }
-        .btn-primary:disabled { background: #555; cursor: not-allowed; box-shadow: none; }
-        .btn-outline {
-            background: transparent; border: 1px solid #ff0000; color: #ff0000;
+        .btn-primary:hover { 
+            background: linear-gradient(135deg, #ff1a1a, #cc0000);
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.7); 
+            transform: translateY(-2px);
         }
-        .btn-outline:hover { background: #ff0000; color: #000; }
+        .btn-primary:active { transform: translateY(1px); box-shadow: 0 2px 10px rgba(255, 0, 0, 0.5); }
+        .btn-primary:disabled { background: #333; color: #777; box-shadow: none; transform: none; cursor: not-allowed; }
         
-        .switch-form { text-align: center; margin-top: 15px; font-size: 14px; color: #888; }
-        .switch-form span { color: #ff0000; cursor: pointer; text-decoration: underline; }
+        .btn-outline {
+            background: transparent; border: 2px solid #ff0000; color: #ff0000;
+            box-shadow: none;
+        }
+        .btn-outline:hover { background: #ff0000; color: #000; box-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
+        
+        .switch-form { text-align: center; margin-top: 20px; font-size: 14px; color: #888; }
+        .switch-form span { color: #ff0000; cursor: pointer; text-decoration: none; font-weight: 700; transition: color 0.3s; }
+        .switch-form span:hover { color: #ff6666; text-decoration: underline; }
         
         .code-input {
-            text-align: center; font-size: 32px; letter-spacing: 15px;
-            font-weight: bold; color: #ff0000 !important;
+            text-align: center; font-size: 36px; letter-spacing: 20px;
+            font-weight: 900; color: #ff0000 !important;
+            background: rgba(255, 0, 0, 0.05) !important;
+            border-color: #ff0000 !important;
         }
         
         /* Профиль */
         .profile-header {
-            display: flex; align-items: center; gap: 20px;
-            margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 20px;
+            display: flex; align-items: center; gap: 25px;
+            margin-bottom: 30px; border-bottom: 1px solid rgba(255, 0, 0, 0.2); padding-bottom: 25px;
         }
         .avatar {
-            width: 80px; height: 80px; background: linear-gradient(135deg, #ff0000, #330000);
+            width: 90px; height: 90px; 
+            background: linear-gradient(135deg, #ff0000, #330000);
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-size: 32px; font-weight: bold; box-shadow: 0 0 15px rgba(255,0,0,0.5);
+            font-size: 36px; font-weight: 900; 
+            box-shadow: 0 0 25px rgba(255,0,0,0.6), inset 0 0 15px rgba(0,0,0,0.5);
+            border: 2px solid #ff0000;
+            text-shadow: 0 0 10px rgba(255,0,0,0.8);
         }
-        .profile-info h3 { border: none; margin-bottom: 5px; font-size: 24px; color: #fff; }
-        .profile-info .user-id { color: #ff0000; font-weight: bold; font-size: 14px; margin-bottom: 5px; }
+        .profile-info h3 { border: none; margin-bottom: 5px; font-size: 28px; color: #fff; letter-spacing: 1px; }
+        .profile-info .user-id { color: #ff0000; font-weight: 800; font-size: 16px; margin-bottom: 8px; letter-spacing: 1px; }
         .profile-info p { color: #888; font-size: 14px; }
-        .profile-bio { margin-top: 15px; color: #ccc; line-height: 1.6; background: #0a0a0a; padding: 15px; border-radius: 5px; border-left: 3px solid #ff0000; }
         
         .stats-bar {
-            display: flex; justify-content: space-between; background: #0a0a0a;
-            padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #222;
+            display: flex; justify-content: space-around; background: rgba(0,0,0,0.5);
+            padding: 25px; border-radius: 15px; margin-bottom: 30px; 
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            box-shadow: inset 0 0 20px rgba(255, 0, 0, 0.05);
         }
         .stats-bar div { text-align: center; }
-        .stats-bar span { display: block; color: #ff0000; font-size: 20px; font-weight: bold; margin-top: 5px; }
-        .stats-bar label { color: #888; font-size: 12px; text-transform: uppercase; }
+        .stats-bar span { display: block; color: #ff0000; font-size: 26px; font-weight: 900; margin-top: 8px; text-shadow: 0 0 10px rgba(255,0,0,0.5); }
+        .stats-bar label { color: #aaa; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
 
         /* Магазин */
-        .shop-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;
+        .shop-empty {
+            text-align: center; padding: 60px 20px; 
+            background: rgba(0,0,0,0.4); border: 1px dashed rgba(255, 0, 0, 0.4);
+            border-radius: 15px; color: #888; font-size: 18px; font-weight: 600;
         }
-        .shop-item {
-            background: #0a0a0a; border: 1px solid #333; border-radius: 10px;
-            padding: 20px; text-align: center; transition: all 0.3s;
-        }
-        .shop-item:hover { border-color: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.2); transform: translateY(-5px); }
-        .shop-item h4 { color: #fff; margin-bottom: 10px; }
-        .shop-item p { color: #888; font-size: 13px; margin-bottom: 15px; min-height: 40px; }
-        .shop-item .price { color: #ff0000; font-weight: bold; font-size: 18px; margin-bottom: 15px; }
-        .shop-item button { width: 100%; padding: 10px; font-size: 14px; }
+        .shop-empty span { display: block; font-size: 40px; margin-bottom: 15px; }
 
-        /* Модальное окно настроек */
+        /* Модальное окно */
         .modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+            display: flex; justify-content: center; align-items: center;
             z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
         }
         .modal-content {
-            background: #111; border: 1px solid #ff0000; border-radius: 10px;
-            padding: 30px; width: 100%; max-width: 400px; box-shadow: 0 0 30px rgba(255,0,0,0.5);
+            background: #111; border: 2px solid #ff0000; border-radius: 20px;
+            padding: 40px; width: 100%; max-width: 450px; 
+            box-shadow: 0 0 50px rgba(255,0,0,0.4);
         }
-        .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .modal-actions { display: flex; gap: 15px; margin-top: 30px; }
         .modal-actions button { flex: 1; }
     </style>
 </head>
@@ -152,9 +195,10 @@
 
     <header>
         <div class="logo-container">
-            <!-- ТУТ ВАШ ЛОГОТИП -->
-            <img src="logo.png" alt="DexoClient Logo" class="header-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <div class="logo-text" style="display:none; font-size: 24px; font-weight: 900; color: #ff0000;">DEXOCLIENT</div>
+            <!-- ТУТ ВАШИ КАРТИНКИ -->
+            <!-- Сохраните их как logo_d.png и logo_text.png -->
+            <img src="logo_d.png" alt="D" class="header-logo-icon" onerror="this.style.display='none'">
+            <img src="logo_text.png" alt="DEXOCLIENT" class="header-logo-text" onerror="this.style.display='none'">
         </div>
         <nav>
             <button id="nav-login" onclick="showAuth('login')">Вход</button>
@@ -205,8 +249,8 @@
 
             <!-- Форма ввода кода -->
             <form id="verify-form" class="hidden" onsubmit="verifyCode(event)">
-                <h2>Подтверждение Email</h2>
-                <p style="text-align: center; margin-bottom: 15px; color: #888;">Мы отправили 6-значный код на <br><b id="code-target-email" style="color:#ff0000"></b></p>
+                <h2>Подтверждение</h2>
+                <p style="text-align: center; margin-bottom: 20px; color: #aaa;">Мы отправили 6-значный код на <br><b id="code-target-email" style="color:#ff0000"></b></p>
                 <div class="form-group">
                     <input type="text" id="verification-input" class="code-input" maxlength="6" placeholder="000000" required>
                 </div>
@@ -229,24 +273,15 @@
             <div class="stats-bar">
                 <div>
                     <label>Баланс</label>
-                    <span id="profile-balance">0</span>
+                    <span id="profile-balance">500</span>
                 </div>
                 <div>
                     <label>Статус</label>
-                    <span id="profile-status" style="font-size: 16px; margin-top: 8px;">Игрок</span>
+                    <span id="profile-status" style="font-size: 20px; margin-top: 12px;">Игрок</span>
                 </div>
-                <div>
-                    <label>Инвентарь</label>
-                    <span id="profile-inventory" style="font-size: 16px; margin-top: 8px;">Пусто</span>
-                </div>
-            </div>
-
-            <div class="profile-bio">
-                <p><strong>О себе:</strong></p>
-                <p id="profile-bio-text">Пользователь пока ничего о себе не рассказал.</p>
             </div>
             
-            <button class="btn-primary btn-outline" style="margin-top: 20px;" onclick="openSettings()">Настройки профиля</button>
+            <button class="btn-primary btn-outline" onclick="openSettings()">Настройки профиля</button>
         </div>
 
         <!-- Секция Магазина -->
@@ -258,8 +293,10 @@
                     <span id="shop-balance">0</span>
                 </div>
             </div>
-            <div class="shop-grid" id="shop-items-container">
-                <!-- Товары генерируются через JS -->
+            
+            <div class="shop-empty">
+                <span>🛒</span>
+                Товары скоро появятся!
             </div>
         </div>
     </main>
@@ -276,10 +313,6 @@
                 <label>Новый пароль (оставьте пустым, чтобы не менять)</label>
                 <input type="password" id="settings-password" placeholder="Новый пароль">
             </div>
-            <div class="form-group">
-                <label>О себе</label>
-                <textarea id="settings-bio" rows="3"></textarea>
-            </div>
             <div class="modal-actions">
                 <button class="btn-primary btn-outline" onclick="closeSettings()">Отмена</button>
                 <button class="btn-primary" onclick="saveSettings()">Сохранить</button>
@@ -295,7 +328,7 @@
         // ============================================
         const EMAILJS_PUBLIC_KEY = 'RGJCTTeymbxVrIaXB'; 
         const EMAILJS_SERVICE_ID = 'service_9ozbk62'; 
-        const EMAILJS_TEMPLATE_ID = 'template_w4pkfga'; 
+        const EMAILJS_TEMPLATE_ID = 'template_xlmtipr'; 
 
         emailjs.init(EMAILJS_PUBLIC_KEY);
 
@@ -304,14 +337,6 @@
         let currentUser = localStorage.getItem('dexo_current');
         let pendingUser = null;
         let generatedCode = null;
-
-        // --- Игровые предметы для магазина ---
-        const shopItems = [
-            { id: 'vip', name: 'VIP Статус', desc: 'Особый значок в профиле', price: 500, type: 'status' },
-            { id: 'red_nick', name: 'Красный Ник', desc: 'Ваш никнейм станет красным', price: 300, type: 'cosmetic' },
-            { id: 'boost', name: 'Буст Профиля', desc: '+100 к крутости', price: 200, type: 'cosmetic' },
-            { id: 'custom_id', name: 'Красивый ID', desc: 'Смена ID на 0001', price: 1000, type: 'special' }
-        ];
 
         // --- Навигация ---
         function showAuth(type) {
@@ -334,7 +359,6 @@
             document.getElementById('profile-section').classList.add('hidden');
             document.getElementById('shop-section').classList.add('hidden');
 
-            // Сброс активных классов на кнопках
             document.getElementById('nav-profile').classList.remove('active');
             document.getElementById('nav-shop').classList.remove('active');
 
@@ -345,7 +369,8 @@
             } else if (section === 'shop') {
                 document.getElementById('shop-section').classList.remove('hidden');
                 document.getElementById('nav-shop').classList.add('active');
-                renderShop();
+                const user = users.find(u => u.email === currentUser);
+                document.getElementById('shop-balance').textContent = user.balance;
             }
         }
 
@@ -361,8 +386,6 @@
             if (users.find(u => u.email === email)) { alert('Пользователь с таким Email уже зарегистрирован!'); return; }
 
             generatedCode = generateCode();
-            
-            // Генерируем уникальный ID от 1000 до 9999
             const uniqueId = Math.floor(1000 + Math.random() * 9000).toString();
             
             pendingUser = { 
@@ -370,9 +393,7 @@
                 username, 
                 email, 
                 password, 
-                bio: '',
-                balance: 500, // Стартовый баланс
-                inventory: [],
+                balance: 500,
                 status: 'Игрок'
             };
 
@@ -423,7 +444,7 @@
                 localStorage.setItem('dexo_current', currentUser);
                 checkAuthState();
                 document.getElementById('login-form').reset();
-                showSection('profile'); // Сразу открываем профиль
+                showSection('profile');
             } else {
                 alert('Неверный Email или пароль!');
             }
@@ -468,28 +489,12 @@
             document.getElementById('profile-id').textContent = `#${user.id}`;
             document.getElementById('profile-balance').textContent = user.balance;
             document.getElementById('profile-status').textContent = user.status;
-            document.getElementById('profile-bio-text').textContent = user.bio || 'Пользователь пока ничего о себе не рассказал.';
-            
-            // Инвентарь
-            const invText = user.inventory.length > 0 ? user.inventory.join(', ') : 'Пусто';
-            document.getElementById('profile-inventory').textContent = invText;
-
-            // Красим ник, если куплен "Красный Ник"
-            const nameEl = document.getElementById('profile-username');
-            if (user.inventory.includes('red_nick')) {
-                nameEl.style.color = '#ff0000';
-                nameEl.style.textShadow = '0 0 10px #ff0000';
-            } else {
-                nameEl.style.color = '#fff';
-                nameEl.style.textShadow = 'none';
-            }
         }
 
         // --- Настройки профиля ---
         function openSettings() {
             const user = users.find(u => u.email === currentUser);
             document.getElementById('settings-username').value = user.username;
-            document.getElementById('settings-bio').value = user.bio;
             document.getElementById('settings-password').value = '';
             document.getElementById('settings-modal').classList.remove('hidden');
         }
@@ -502,13 +507,10 @@
             const user = users.find(u => u.email === currentUser);
             const newUsername = document.getElementById('settings-username').value.trim();
             const newPassword = document.getElementById('settings-password').value;
-            const newBio = document.getElementById('settings-bio').value.trim();
 
             if (newUsername) user.username = newUsername;
             if (newPassword) user.password = newPassword;
-            user.bio = newBio;
 
-            // Обновляем в базе
             const index = users.findIndex(u => u.email === currentUser);
             users[index] = user;
             localStorage.setItem('dexo_users', JSON.stringify(users));
@@ -516,62 +518,6 @@
             closeSettings();
             updateProfileUI();
             alert('Настройки сохранены!');
-        }
-
-        // --- Магазин ---
-        function renderShop() {
-            const user = users.find(u => u.email === currentUser);
-            document.getElementById('shop-balance').textContent = user.balance;
-            
-            const container = document.getElementById('shop-items-container');
-            container.innerHTML = '';
-
-            shopItems.forEach(item => {
-                const isBought = user.inventory.includes(item.id);
-                const div = document.createElement('div');
-                div.className = 'shop-item';
-                div.innerHTML = `
-                    <h4>${item.name}</h4>
-                    <p>${item.desc}</p>
-                    <div class="price">${item.price} DexoCoins</div>
-                    <button class="btn-primary ${isBought ? 'btn-outline' : ''}" 
-                            onclick="buyItem('${item.id}', ${item.price})"
-                            ${isBought ? 'disabled' : ''}>
-                        ${isBought ? 'Куплено' : 'Купить'}
-                    </button>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function buyItem(itemId, price) {
-            const user = users.find(u => u.email === currentUser);
-            
-            if (user.balance < price) {
-                alert('Недостаточно средств!');
-                return;
-            }
-
-            if (user.inventory.includes(itemId)) {
-                alert('У вас уже есть этот предмет!');
-                return;
-            }
-
-            // Покупка
-            user.balance -= price;
-            user.inventory.push(itemId);
-            
-            // Если куплен VIP
-            if (itemId === 'vip') user.status = 'VIP';
-
-            // Сохраняем
-            const index = users.findIndex(u => u.email === currentUser);
-            users[index] = user;
-            localStorage.setItem('dexo_users', JSON.stringify(users));
-
-            alert(`Вы успешно купили предмет!`);
-            renderShop(); // Обновляем магазин
-            updateProfileUI(); // Обновляем профиль (баланс)
         }
 
         // --- Старт ---
