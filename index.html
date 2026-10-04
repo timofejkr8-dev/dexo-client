@@ -56,7 +56,6 @@
             box-shadow: 0 0 20px rgba(255, 0, 0, 0.6); 
             color: #000; transform: translateY(-2px);
         }
-        /* Особый стиль для админ-кнопки */
         #nav-admin {
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(184, 134, 11, 0.2));
             border-color: #ffd700; color: #ffd700;
@@ -145,6 +144,13 @@
         .switch-form span { color: #ff0000; cursor: pointer; font-weight: 700; transition: color 0.3s; }
         .switch-form span:hover { color: #ff6666; text-decoration: underline; }
         
+        .forgot-link {
+            display: block; text-align: center; margin-top: 15px;
+            color: #ff0000; font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: color 0.3s;
+        }
+        .forgot-link:hover { color: #ff6666; text-decoration: underline; }
+        
         .code-input {
             text-align: center; font-size: 36px; letter-spacing: 20px;
             font-weight: 900; color: #ff0000 !important;
@@ -193,7 +199,7 @@
         }
         .shop-empty span { display: block; font-size: 40px; margin-bottom: 15px; }
 
-        /* Админ-меню */
+        /* Админ */
         .admin-panel {
             background: rgba(30, 20, 0, 0.5);
             border: 1px solid #ffd700;
@@ -235,6 +241,8 @@
         
         @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
+
+        .info-text { text-align: center; color: #aaa; font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -250,7 +258,6 @@
             <button id="nav-login" onclick="showAuth('login')">Вход</button>
             <button id="nav-register" onclick="showAuth('register')">Регистрация</button>
             
-            <!-- Профиль + Админ рядом -->
             <button id="nav-profile" class="hidden" onclick="showSection('profile')">Профиль</button>
             <button id="nav-admin" class="hidden" onclick="showSection('admin')">👑 Админ</button>
             
@@ -262,6 +269,8 @@
     <main>
         <!-- Авторизация -->
         <div id="auth-section" class="container auth-container">
+
+            <!-- Вход -->
             <form id="login-form" class="hidden" onsubmit="login(event)">
                 <h2>Вход</h2>
                 <div class="form-group">
@@ -277,9 +286,11 @@
                     <label for="remember-me">Запомнить меня</label>
                 </div>
                 <button type="submit" class="btn-primary">Войти</button>
+                <span class="forgot-link" onclick="showAuth('forgot')">Забыли пароль?</span>
                 <p class="switch-form">Нет аккаунта? <span onclick="showAuth('register')">Зарегистрироваться</span></p>
             </form>
 
+            <!-- Регистрация -->
             <form id="register-form" class="hidden" onsubmit="sendCode(event)">
                 <h2>Создать профиль</h2>
                 <div class="form-group">
@@ -298,14 +309,53 @@
                 <p class="switch-form">Уже есть аккаунт? <span onclick="showAuth('login')">Войти</span></p>
             </form>
 
+            <!-- Подтверждение регистрации -->
             <form id="verify-form" class="hidden" onsubmit="verifyCode(event)">
                 <h2>Подтверждение</h2>
-                <p style="text-align: center; margin-bottom: 20px; color: #aaa;">Мы отправили 6-значный код на <br><b id="code-target-email" style="color:#ff0000"></b></p>
+                <p class="info-text">Мы отправили 6-значный код на <br><b id="code-target-email" style="color:#ff0000"></b></p>
                 <div class="form-group">
                     <input type="text" id="verification-input" class="code-input" maxlength="6" placeholder="000000" required>
                 </div>
                 <button type="submit" class="btn-primary">Подтвердить</button>
                 <p class="switch-form"><span onclick="showAuth('register')">← Назад</span></p>
+            </form>
+
+            <!-- СБРОС ПАРОЛЯ: Шаг 1 - Ввод email -->
+            <form id="forgot-form" class="hidden" onsubmit="sendResetCode(event)">
+                <h2>Восстановление</h2>
+                <p class="info-text">Введите email, указанный при регистрации.<br>Мы отправим код для сброса пароля.</p>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="forgot-email" required placeholder="Введите email">
+                </div>
+                <button type="submit" class="btn-primary" id="forgot-code-btn">Отправить код</button>
+                <p class="switch-form"><span onclick="showAuth('login')">← Назад ко входу</span></p>
+            </form>
+
+            <!-- СБРОС ПАРОЛЯ: Шаг 2 - Ввод кода -->
+            <form id="reset-code-form" class="hidden" onsubmit="verifyResetCode(event)">
+                <h2>Введите код</h2>
+                <p class="info-text">Код отправлен на <br><b id="reset-target-email" style="color:#ff0000"></b></p>
+                <div class="form-group">
+                    <input type="text" id="reset-code-input" class="code-input" maxlength="6" placeholder="000000" required>
+                </div>
+                <button type="submit" class="btn-primary">Проверить код</button>
+                <p class="switch-form"><span onclick="showAuth('forgot')">← Изменить email</span></p>
+            </form>
+
+            <!-- СБРОС ПАРОЛЯ: Шаг 3 - Новый пароль -->
+            <form id="reset-password-form" class="hidden" onsubmit="saveNewPassword(event)">
+                <h2>Новый пароль</h2>
+                <p class="info-text">Придумайте новый пароль для вашего аккаунта.</p>
+                <div class="form-group">
+                    <label>Новый пароль</label>
+                    <input type="password" id="new-password" required placeholder="Минимум 6 символов">
+                </div>
+                <div class="form-group">
+                    <label>Повторите пароль</label>
+                    <input type="password" id="new-password-confirm" required placeholder="Повторите пароль">
+                </div>
+                <button type="submit" class="btn-primary">Сохранить пароль</button>
             </form>
         </div>
 
@@ -347,7 +397,7 @@
             </div>
         </div>
 
-        <!-- Админ-панель -->
+        <!-- Админ -->
         <div id="admin-section" class="container hidden">
             <h2>👑 Админ-панель</h2>
             
@@ -394,9 +444,9 @@
         emailjs.init(EMAILJS_PUBLIC_KEY);
 
         // ============================================
-        // ОДНОРАЗОВАЯ ОЧИСТКА СТАРЫХ АККАУНТОВ
+        // ОДНОРАЗОВАЯ ОЧИСТКА (поменяйте на v3, если нужно снова)
         // ============================================
-        const CURRENT_VERSION = 'v2'; // Поменяйте на 'v3' если понадобится очистить снова
+        const CURRENT_VERSION = 'v2';
         const savedVersion = localStorage.getItem('dexo_version');
         
         if (savedVersion !== CURRENT_VERSION) {
@@ -404,17 +454,23 @@
             localStorage.removeItem('dexo_current');
             localStorage.removeItem('dexo_remember');
             localStorage.setItem('dexo_version', CURRENT_VERSION);
-            console.log('🧹 База данных очищена. Все старые аккаунты удалены.');
+            console.log('🧹 База данных очищена');
         }
 
         // --- База данных ---
         let users = JSON.parse(localStorage.getItem('dexo_users')) || [];
         let currentUser = localStorage.getItem('dexo_current');
+        
         let pendingUser = null;
         let generatedCode = null;
 
+        // Переменные для сброса пароля
+        let resetEmail = null;
+        let resetCode = null;
+        let resetVerified = false;
+
         // ============================================
-        // УВЕДОМЛЕНИЯ (TOASTS)
+        // УВЕДОМЛЕНИЯ
         // ============================================
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
@@ -422,7 +478,6 @@
             toast.className = `toast ${type}`;
             
             const icons = { success: '✅', error: '❌', info: 'ℹ️' };
-            
             toast.innerHTML = `
                 <span class="toast-icon">${icons[type] || 'ℹ️'}</span>
                 <span>${message}</span>
@@ -448,13 +503,25 @@
             document.getElementById('shop-section').classList.add('hidden');
             document.getElementById('admin-section').classList.add('hidden');
             
-            document.getElementById('login-form').classList.add('hidden');
-            document.getElementById('register-form').classList.add('hidden');
-            document.getElementById('verify-form').classList.add('hidden');
+            // Скрываем все формы
+            ['login-form', 'register-form', 'verify-form', 'forgot-form', 'reset-code-form', 'reset-password-form'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
 
-            if(type === 'login') document.getElementById('login-form').classList.remove('hidden');
-            if(type === 'register') document.getElementById('register-form').classList.remove('hidden');
-            if(type === 'verify') document.getElementById('verify-form').classList.remove('hidden');
+            // Показываем нужную
+            if (type === 'login') document.getElementById('login-form').classList.remove('hidden');
+            if (type === 'register') document.getElementById('register-form').classList.remove('hidden');
+            if (type === 'verify') document.getElementById('verify-form').classList.remove('hidden');
+            if (type === 'forgot') document.getElementById('forgot-form').classList.remove('hidden');
+            if (type === 'reset-code') document.getElementById('reset-code-form').classList.remove('hidden');
+            if (type === 'reset-password') document.getElementById('reset-password-form').classList.remove('hidden');
+
+            // Сброс состояния сброса пароля при уходе
+            if (type === 'login' || type === 'register') {
+                resetEmail = null;
+                resetCode = null;
+                resetVerified = false;
+            }
         }
 
         function showSection(section) {
@@ -512,7 +579,6 @@
 
             generatedCode = generateCode();
             
-            // Логика админа: TE3KOS получает ID = 1 и статус Администратор
             let uniqueId, status;
             if (username === 'TE3KOS') {
                 uniqueId = '1';
@@ -523,12 +589,8 @@
             }
             
             pendingUser = { 
-                id: uniqueId,
-                username, 
-                email, 
-                password, 
-                balance: 500,
-                status: status
+                id: uniqueId, username, email, password, 
+                balance: 500, status: status
             };
 
             const btn = document.getElementById('send-code-btn');
@@ -573,6 +635,109 @@
             document.getElementById('login-email').value = email;
             document.getElementById('verification-input').value = '';
             document.getElementById('register-form').reset();
+        }
+
+        // ============================================
+        // СБРОС ПАРОЛЯ
+        // ============================================
+        async function sendResetCode(e) {
+            e.preventDefault();
+            const email = document.getElementById('forgot-email').value.trim();
+
+            const user = users.find(u => u.email === email);
+            if (!user) {
+                showToast('Пользователь с таким email не найден!', 'error');
+                return;
+            }
+
+            resetEmail = email;
+            resetCode = generateCode();
+
+            const btn = document.getElementById('forgot-code-btn');
+            btn.disabled = true; btn.textContent = 'Отправляем...';
+
+            try {
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                    to_email: email, 
+                    to_name: user.username, 
+                    verification_code: resetCode
+                });
+                document.getElementById('reset-target-email').textContent = email;
+                showAuth('reset-code');
+                document.getElementById('reset-code-input').focus();
+                showToast('Код для сброса отправлен!', 'success');
+            } catch (error) {
+                console.error('Ошибка отправки:', error);
+                showToast('Не удалось отправить код. Проверьте email.', 'error');
+            } finally {
+                btn.disabled = false; btn.textContent = 'Отправить код';
+            }
+        }
+
+        function verifyResetCode(e) {
+            e.preventDefault();
+            const inputCode = document.getElementById('reset-code-input').value.trim();
+
+            if (inputCode !== resetCode) {
+                showToast('Неверный код!', 'error');
+                return;
+            }
+
+            resetVerified = true;
+            showAuth('reset-password');
+            document.getElementById('new-password').focus();
+            showToast('Код верный! Задайте новый пароль.', 'success');
+        }
+
+        function saveNewPassword(e) {
+            e.preventDefault();
+            
+            if (!resetVerified || !resetEmail) {
+                showToast('Сессия сброса истекла. Начните заново.', 'error');
+                showAuth('forgot');
+                return;
+            }
+
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('new-password-confirm').value;
+
+            if (newPassword.length < 6) {
+                showToast('Пароль должен быть минимум 6 символов!', 'error');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showToast('Пароли не совпадают!', 'error');
+                return;
+            }
+
+            // Находим пользователя и обновляем пароль
+            const index = users.findIndex(u => u.email === resetEmail);
+            if (index === -1) {
+                showToast('Пользователь не найден!', 'error');
+                return;
+            }
+
+            users[index].password = newPassword;
+            localStorage.setItem('dexo_users', JSON.stringify(users));
+
+            showToast('Пароль успешно изменён! Войдите с новым паролем.', 'success');
+
+            // Сброс состояния
+            const email = resetEmail;
+            resetEmail = null;
+            resetCode = null;
+            resetVerified = false;
+
+            // Возврат к входу
+            setTimeout(() => {
+                showAuth('login');
+                document.getElementById('login-email').value = email;
+                document.getElementById('login-password').value = '';
+                document.getElementById('forgot-form').reset();
+                document.getElementById('reset-code-input').value = '';
+                document.getElementById('reset-password-form').reset();
+            }, 800);
         }
 
         // ============================================
@@ -667,15 +832,12 @@
             document.getElementById('profile-status').textContent = user.status;
             
             const avatarEl = document.getElementById('profile-avatar');
-            if (admin) {
-                avatarEl.classList.add('admin-avatar');
-            } else {
-                avatarEl.classList.remove('admin-avatar');
-            }
+            if (admin) avatarEl.classList.add('admin-avatar');
+            else avatarEl.classList.remove('admin-avatar');
         }
 
         // ============================================
-        // АДМИН-ПАНЕЛЬ
+        // АДМИН
         // ============================================
         function updateAdminUI() {
             const totalBalance = users.reduce((sum, u) => sum + (u.balance || 0), 0);
@@ -712,12 +874,11 @@
         }
 
         // ============================================
-        // ЗАПОМИНАНИЕ ВХОДА
+        // СТАРТ
         // ============================================
         window.onload = () => {
             const remember = localStorage.getItem('dexo_remember');
             
-            // Если пользователь НЕ хотел запоминаться — выходим при перезагрузке
             if (remember === 'false' && currentUser) {
                 currentUser = null;
                 localStorage.removeItem('dexo_current');
