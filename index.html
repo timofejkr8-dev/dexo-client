@@ -3,224 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DexoClient - Профиль</title>
+    <title>DexoClient - Регистрация</title>
     <style>
-        /* Сброс стилей и базовые настройки */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #0a0a0a;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        /* Шапка сайта */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #0a0a0a; color: #fff; display: flex; flex-direction: column; min-height: 100vh; }
         header {
             background: linear-gradient(180deg, #1a0000 0%, #0a0a0a 100%);
-            padding: 15px 40px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 2px solid #ff0000;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+            padding: 15px 40px; display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 2px solid #ff0000; box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
         }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo-container img {
-            height: 50px;
-            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.8));
-        }
-
+        .logo-container { display: flex; align-items: center; gap: 15px; }
+        .logo-container img { height: 50px; filter: drop-shadow(0 0 10px rgba(255,0,0,0.8)); }
         .logo-text {
-            font-size: 24px;
-            font-weight: 900;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            background: linear-gradient(90deg, #ffffff, #ff0000);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 24px; font-weight: 900; letter-spacing: 2px;
+            background: linear-gradient(90deg, #fff, #ff0000);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-
         nav button {
-            background: transparent;
-            color: #fff;
-            border: 1px solid #ff0000;
-            padding: 10px 20px;
-            margin-left: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
+            background: transparent; color: #fff; border: 1px solid #ff0000;
+            padding: 10px 20px; margin-left: 10px; border-radius: 5px;
+            cursor: pointer; font-weight: bold; transition: all 0.3s ease;
         }
-
-        nav button:hover {
-            background: #ff0000;
-            box-shadow: 0 0 15px #ff0000;
-            color: #000;
-        }
-
-        /* Основной контент */
-        main {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px 20px;
-        }
-
+        nav button:hover { background: #ff0000; box-shadow: 0 0 15px #ff0000; color: #000; }
+        main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
         .container {
-            width: 100%;
-            max-width: 500px;
-            background: #111;
-            border: 1px solid #330000;
-            border-radius: 15px;
-            padding: 30px;
+            width: 100%; max-width: 500px; background: #111;
+            border: 1px solid #330000; border-radius: 15px; padding: 30px;
             box-shadow: 0 0 30px rgba(255, 0, 0, 0.1);
         }
-
-        .hidden {
-            display: none !important;
+        .hidden { display: none !important; }
+        h2 { text-align: center; margin-bottom: 25px; color: #ff0000; text-transform: uppercase; letter-spacing: 1px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #ccc; font-size: 14px; }
+        .form-group input {
+            width: 100%; padding: 12px; background: #050505;
+            border: 1px solid #333; border-radius: 5px; color: #fff; outline: none; transition: border 0.3s;
         }
-
-        /* Формы */
-        h2 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #ff0000;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #ccc;
-            font-size: 14px;
-        }
-
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            background: #050505;
-            border: 1px solid #333;
-            border-radius: 5px;
-            color: #fff;
-            outline: none;
-            transition: border 0.3s ease;
-        }
-
-        .form-group input:focus, .form-group textarea:focus {
-            border-color: #ff0000;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
-        }
-
+        .form-group input:focus { border-color: #ff0000; box-shadow: 0 0 10px rgba(255,0,0,0.3); }
         .btn-primary {
-            width: 100%;
-            padding: 12px;
-            background: #ff0000;
-            color: #000;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
+            width: 100%; padding: 12px; background: #ff0000; color: #000;
+            border: none; border-radius: 5px; font-weight: bold; font-size: 16px;
+            cursor: pointer; transition: all 0.3s; text-transform: uppercase;
         }
-
-        .btn-primary:hover {
-            background: #cc0000;
-            box-shadow: 0 0 20px #ff0000;
+        .btn-primary:hover { background: #cc0000; box-shadow: 0 0 20px #ff0000; }
+        .btn-primary:disabled { background: #555; cursor: not-allowed; box-shadow: none; }
+        .switch-form { text-align: center; margin-top: 15px; font-size: 14px; color: #888; }
+        .switch-form span { color: #ff0000; cursor: pointer; text-decoration: underline; }
+        .code-input {
+            text-align: center; font-size: 32px; letter-spacing: 15px;
+            font-weight: bold; color: #ff0000 !important;
         }
-
-        .switch-form {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
-            color: #888;
-        }
-
-        .switch-form span {
-            color: #ff0000;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        /* Профиль */
         .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 25px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 20px;
+            display: flex; align-items: center; gap: 20px;
+            margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 20px;
         }
-
         .avatar {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #ff0000, #330000);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 32px;
-            font-weight: bold;
-            color: #fff;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            width: 80px; height: 80px; background: linear-gradient(135deg, #ff0000, #330000);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 32px; font-weight: bold; box-shadow: 0 0 15px rgba(255,0,0,0.5);
         }
-
-        .profile-info h3 {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        .profile-info p {
-            color: #888;
-            font-size: 14px;
-        }
-
-        .profile-bio {
-            margin-top: 15px;
-            color: #ccc;
-            line-height: 1.6;
-        }
-
-        #edit-profile-btn {
-            margin-top: 20px;
-            background: transparent;
-            border: 1px solid #ff0000;
-            color: #ff0000;
-        }
-        
-        #edit-profile-btn:hover {
-            background: #ff0000;
-            color: #000;
-        }
+        .profile-info h3 { font-size: 24px; margin-bottom: 5px; }
+        .profile-info p { color: #888; font-size: 14px; }
+        .profile-bio { margin-top: 15px; color: #ccc; line-height: 1.6; }
+        #edit-profile-btn { margin-top: 20px; background: transparent; border: 1px solid #ff0000; color: #ff0000; }
+        #edit-profile-btn:hover { background: #ff0000; color: #000; }
+        .info-text { text-align: center; color: #888; font-size: 14px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo-container">
-            <!-- Убедитесь, что картинка лежит рядом с файлом и называется logo.png -->
-            <img src="logo.png" alt="DexoClient Logo" onerror="this.style.display='none'">
+            <img src="logo.png" alt="DexoClient" onerror="this.style.display='none'">
             <div class="logo-text">DexoClient</div>
         </div>
         <nav>
@@ -231,14 +85,14 @@
     </header>
 
     <main>
-        <!-- Секция Авторизации/Регистрации -->
         <div id="auth-section" class="container">
-            <!-- Форма Входа -->
+
+            <!-- Форма входа -->
             <form id="login-form" class="hidden" onsubmit="login(event)">
-                <h2>Вход в систему</h2>
+                <h2>Вход</h2>
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" id="login-email" required placeholder="Введите ваш email">
+                    <input type="email" id="login-email" required placeholder="Введите email">
                 </div>
                 <div class="form-group">
                     <label>Пароль</label>
@@ -248,27 +102,38 @@
                 <p class="switch-form">Нет аккаунта? <span onclick="showAuth('register')">Зарегистрироваться</span></p>
             </form>
 
-            <!-- Форма Регистрации -->
-            <form id="register-form" class="hidden" onsubmit="register(event)">
+            <!-- Форма регистрации -->
+            <form id="register-form" class="hidden" onsubmit="sendCode(event)">
                 <h2>Создать профиль</h2>
                 <div class="form-group">
-                    <label>Имя пользователя (Никнейм)</label>
-                    <input type="text" id="reg-username" required placeholder="Например: DexoMaster">
+                    <label>Имя пользователя</label>
+                    <input type="text" id="reg-username" required placeholder="Никнейм">
                 </div>
                 <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="reg-email" required placeholder="example@mail.com">
+                    <label>Email (Gmail)</label>
+                    <input type="email" id="reg-email" required placeholder="example@gmail.com">
                 </div>
                 <div class="form-group">
                     <label>Пароль</label>
                     <input type="password" id="reg-password" required placeholder="Минимум 6 символов">
                 </div>
-                <button type="submit" class="btn-primary">Зарегистрироваться</button>
+                <button type="submit" class="btn-primary" id="send-code-btn">Получить код на почту</button>
                 <p class="switch-form">Уже есть аккаунт? <span onclick="showAuth('login')">Войти</span></p>
+            </form>
+
+            <!-- Форма ввода кода -->
+            <form id="verify-form" class="hidden" onsubmit="verifyCode(event)">
+                <h2>Подтверждение Email</h2>
+                <p class="info-text">Мы отправили 6-значный код на <br><b id="code-target-email" style="color:#ff0000"></b></p>
+                <div class="form-group">
+                    <input type="text" id="verification-input" class="code-input" maxlength="6" placeholder="000000" required>
+                </div>
+                <button type="submit" class="btn-primary">Подтвердить</button>
+                <p class="switch-form"><span onclick="showAuth('register')">← Назад</span></p>
             </form>
         </div>
 
-        <!-- Секция Профиля -->
+        <!-- Профиль -->
         <div id="profile-section" class="container hidden">
             <div class="profile-header">
                 <div class="avatar" id="profile-avatar">D</div>
@@ -279,18 +144,33 @@
             </div>
             <div class="profile-bio">
                 <p><strong>О себе:</strong></p>
-                <p id="profile-bio-text">Пользователь пока ничего не рассказал о себе.</p>
+                <p id="profile-bio-text">Пользователь пока ничего о себе не рассказал.</p>
             </div>
             <button class="btn-primary" id="edit-profile-btn" onclick="editBio()">Редактировать профиль</button>
         </div>
     </main>
 
-    <script>
-        // --- Имитация Базы Данных (LocalStorage) ---
-        // В реальном проекте это должно быть на сервере (Node.js, PHP, Python и т.д.)
+    <!-- Подключаем EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
+    <script>
+        // ============================================
+        // !!! ВАЖНО: ВСТАВЬТЕ СВОИ КЛЮЧИ СЮДА !!!
+        // ============================================
+        const EMAILJS_PUBLIC_KEY = 'ВАШ_PUBLIC_KEY';
+        const EMAILJS_SERVICE_ID = 'ВАШ_SERVICE_ID';
+        const EMAILJS_TEMPLATE_ID = 'ВАШ_TEMPLATE_ID';
+
+        // Инициализация EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        // --- Локальное "хранилище" пользователей ---
         let users = JSON.parse(localStorage.getItem('dexo_users')) || [];
         let currentUser = localStorage.getItem('dexo_current');
+
+        // Временные данные регистрации
+        let pendingUser = null;
+        let generatedCode = null;
 
         // Переключение между формами
         function showAuth(type) {
@@ -298,39 +178,90 @@
             document.getElementById('profile-section').classList.add('hidden');
             document.getElementById('login-form').classList.add('hidden');
             document.getElementById('register-form').classList.add('hidden');
-            
-            if(type === 'login') {
-                document.getElementById('login-form').classList.remove('hidden');
-            } else {
-                document.getElementById('register-form').classList.remove('hidden');
-            }
+            document.getElementById('verify-form').classList.add('hidden');
+
+            if(type === 'login') document.getElementById('login-form').classList.remove('hidden');
+            if(type === 'register') document.getElementById('register-form').classList.remove('hidden');
+            if(type === 'verify') document.getElementById('verify-form').classList.remove('hidden');
         }
 
-        // Регистрация
-        function register(e) {
+        // Генерация 6-значного кода
+        function generateCode() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        // Отправка кода на почту
+        async function sendCode(e) {
             e.preventDefault();
-            const username = document.getElementById('reg-username').value;
-            const email = document.getElementById('reg-email').value;
+            const username = document.getElementById('reg-username').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
             const password = document.getElementById('reg-password').value;
 
+            // Проверяем, нет ли уже такого пользователя
             if (users.find(u => u.email === email)) {
-                alert('Пользователь с таким Email уже существует!');
+                alert('Пользователь с таким Email уже зарегистрирован!');
                 return;
             }
 
-            const newUser = { username, email, password, bio: '' };
-            users.push(newUser);
+            // Генерируем код
+            generatedCode = generateCode();
+            pendingUser = { username, email, password, bio: '' };
+
+            const btn = document.getElementById('send-code-btn');
+            btn.disabled = true;
+            btn.textContent = 'Отправляем...';
+
+            try {
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                    to_email: email,
+                    to_name: username,
+                    verification_code: generatedCode
+                });
+
+                // Показываем форму ввода кода
+                document.getElementById('code-target-email').textContent = email;
+                showAuth('verify');
+                document.getElementById('verification-input').focus();
+
+            } catch (error) {
+                console.error('Ошибка отправки:', error);
+                alert('Не удалось отправить код. Проверьте настройки EmailJS и правильность email.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Получить код на почту';
+            }
+        }
+
+        // Проверка кода
+        function verifyCode(e) {
+            e.preventDefault();
+            const inputCode = document.getElementById('verification-input').value.trim();
+
+            if (inputCode !== generatedCode) {
+                alert('Неверный код! Попробуйте снова.');
+                return;
+            }
+
+            // Код верный — сохраняем пользователя
+            users.push(pendingUser);
             localStorage.setItem('dexo_users', JSON.stringify(users));
             
-            alert('Регистрация успешна! Теперь вы можете войти.');
+            alert('Регистрация успешна! Теперь войдите в аккаунт.');
+            
+            const email = pendingUser.email;
+            pendingUser = null;
+            generatedCode = null;
+            
             showAuth('login');
             document.getElementById('login-email').value = email;
+            document.getElementById('verification-input').value = '';
+            document.getElementById('register-form').reset();
         }
 
         // Вход
         function login(e) {
             e.preventDefault();
-            const email = document.getElementById('login-email').value;
+            const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value;
 
             const user = users.find(u => u.email === email && u.password === password);
@@ -353,27 +284,23 @@
             showAuth('login');
         }
 
-        // Проверка статуса авторизации при загрузке
+        // Проверка статуса авторизации
         function checkAuthState() {
             if (currentUser) {
-                // Пользователь вошел
                 const user = users.find(u => u.email === currentUser);
                 if (user) {
                     document.getElementById('auth-section').classList.add('hidden');
                     document.getElementById('profile-section').classList.remove('hidden');
-                    
                     document.getElementById('nav-login').classList.add('hidden');
                     document.getElementById('nav-register').classList.add('hidden');
                     document.getElementById('nav-logout').classList.remove('hidden');
 
-                    // Заполнение профиля
                     document.getElementById('profile-username').textContent = user.username;
                     document.getElementById('profile-email').textContent = user.email;
                     document.getElementById('profile-avatar').textContent = user.username.charAt(0).toUpperCase();
-                    document.getElementById('profile-bio-text').textContent = user.bio || 'Пользователь пока ничего не рассказал о себе.';
+                    document.getElementById('profile-bio-text').textContent = user.bio || 'Пользователь пока ничего о себе не рассказал.';
                 }
             } else {
-                // Пользователь не вошел
                 document.getElementById('profile-section').classList.add('hidden');
                 document.getElementById('nav-login').classList.remove('hidden');
                 document.getElementById('nav-register').classList.remove('hidden');
@@ -381,26 +308,22 @@
             }
         }
 
-        // Редактирование профиля (Био)
+        // Редактирование профиля
         function editBio() {
             const user = users.find(u => u.email === currentUser);
             const newBio = prompt('Расскажите о себе:', user.bio);
             if (newBio !== null) {
                 user.bio = newBio;
-                // Обновляем в "базе данных"
                 const index = users.findIndex(u => u.email === currentUser);
                 users[index] = user;
                 localStorage.setItem('dexo_users', JSON.stringify(users));
-                
-                // Обновляем UI
-                document.getElementById('profile-bio-text').textContent = user.bio || 'Пользователь пока ничего не рассказал о себе.';
+                document.getElementById('profile-bio-text').textContent = user.bio || 'Пользователь пока ничего о себе не рассказал.';
             }
         }
 
-        // Инициализация при старте
         window.onload = () => {
             checkAuthState();
-            if(!currentUser) showAuth('login');
+            if (!currentUser) showAuth('login');
         };
     </script>
 </body>
