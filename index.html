@@ -37,10 +37,39 @@
             z-index: 100;
         }
 
-        .logo-container { display: flex; align-items: center; gap: 15px; }
-        .header-logo-icon { height: 45px; filter: drop-shadow(0 0 10px rgba(255,0,0,0.8)); transition: transform 0.3s; }
-        .header-logo-icon:hover { transform: scale(1.1); }
-        .header-logo-text { height: 25px; filter: drop-shadow(0 0 5px rgba(255,0,0,0.5)); }
+        .logo-container { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .header-logo-icon { 
+            height: 48px; 
+            width: auto;
+            filter: drop-shadow(0 0 12px rgba(255,0,0,0.8)); 
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            object-fit: contain;
+        }
+        
+        .logo-container:hover .header-logo-icon { 
+            transform: scale(1.1) rotate(-3deg); 
+        }
+
+        .header-logo-text { 
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #fff;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            user-select: none;
+        }
+
+        .header-logo-text span {
+            color: #ff0000;
+        }
 
         nav { display: flex; gap: 10px; }
         
@@ -195,10 +224,9 @@
 
     <header>
         <div class="logo-container">
-            <!-- ТУТ ВАШИ КАРТИНКИ -->
-            <!-- Сохраните их как logo_d.png и logo_text.png -->
-            <img src="logo_d.png" alt="D" class="header-logo-icon" onerror="this.style.display='none'">
-            <img src="logo_text.png" alt="DEXOCLIENT" class="header-logo-text" onerror="this.style.display='none'">
+            <!-- Вставьте сюда файл логотипа с типом D -->
+            <img src="logo_d.png" alt="Dexo Logo" class="header-logo-icon">
+            <div class="header-logo-text">EXO<span>CLIENT</span></div>
         </div>
         <nav>
             <button id="nav-login" onclick="showAuth('login')">Вход</button>
